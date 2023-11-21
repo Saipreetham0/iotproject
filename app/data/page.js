@@ -6,7 +6,7 @@ import "../styles/globals.css";
 
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import Switch from "../components/Switch";
+// import Switch from "../components/Switch";
 
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 
@@ -26,7 +26,7 @@ const dashboard = () => {
 
         </div> */}
 
-        
+
       </div>
     </div>
   );

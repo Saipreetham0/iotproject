@@ -6,7 +6,7 @@ import "../styles/globals.css";
 
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
-import Switch from "../components/Switch";
+// import Switch from "../components/Switch";
 
 import app from "@/utils/firebase";
 import ImageGallery from "../components/imagegallery";
