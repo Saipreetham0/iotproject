@@ -11,7 +11,7 @@ import React, { useState, useEffect } from "react";
 import app from "@/utils/firebase";
 import ImageGallery from "../components/imagegallery";
 
-import { DocumentPlusIcon } from "@heroicons/react/24/outline";
+
 
 import { getFirestore } from "firebase/firestore";
 

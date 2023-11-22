@@ -52,7 +52,7 @@ const Sensor = () => {
     <div>
       <h2 className="text-xl font-medium m-4 ">
         {" "}
-        Welcome back, {user ? user.email : "UserName"} 🙂
+        Welcome back, {user ? user.displayName || user.email : "UserName"} 🙂
       </h2>
       <h2 className="text-xl font-medium m-4 ">📊 Dashboard</h2>
 

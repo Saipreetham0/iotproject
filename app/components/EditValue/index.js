@@ -257,10 +257,10 @@ const SetPointEdit = () => {
       </div>
 
       <div className="">
-        <div className="rounded-lg p-4 shadow-md">
-          <h2 className="text-xl font-medium mb-2">Light Relay 1</h2>
-          <div className="flex items-center">
-            <label className="font-medium text-gray-700 mr-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mt-4 shadow-md">
+  <h2 className="text-xl font-medium mb-2 dark:text-white">Light Relay 1</h2>
+  <div className="flex items-center">
+    <label className="font-medium text-gray-700 dark:text-gray-300 mr-4">
               Relay Control
             </label>
             <Switch
@@ -280,28 +280,33 @@ const SetPointEdit = () => {
           </div>
         </div>
 
-        <div className="bg-white rounded-lg p-4 mt-4 shadow-md">
-          <h2 className="text-xl font-medium mb-2">Light Relay 2</h2>
-          <div className="flex items-center">
-            <label className="font-medium text-gray-700 mr-4">
-              Relay Control
-            </label>
-            <Switch
-              onChange={handleToggleLightRelay2}
-              checked={lightRelay2}
-              onColor="#10B981"
-              offColor="#EF4444"
-              //   disabled={!isEditingHumidity}
-            />
-            {/* <button
-              type="button"
-              onClick={lightRelay2 ? handleTurnOffRelay2 : handleTurnOnRelay2}
-              className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
-            >
-              {lightRelay2 ? "Turn Off" : "Turn On"}
-            </button> */}
-          </div>
-        </div>
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mt-4 shadow-md">
+  <h2 className="text-xl font-medium mb-2 dark:text-white">Light Relay 2</h2>
+  <div className="flex items-center">
+    <label className="font-medium text-gray-700 dark:text-gray-300 mr-4">
+      Relay Control
+    </label>
+    <Switch
+      onChange={handleToggleLightRelay2}
+      checked={lightRelay2}
+      onColor="#10B981"
+      offColor="#EF4444"
+    />
+    {/* Add dark mode styles to the button if needed */}
+    {/* <button
+      type="button"
+      onClick={lightRelay2 ? handleTurnOffRelay2 : handleTurnOnRelay2}
+      className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-700"
+    >
+      {lightRelay2 ? "Turn Off" : "Turn On"}
+    </button> */}
+
+
+  </div>
+
+
+</div>
+
       </div>
     </div>
   );

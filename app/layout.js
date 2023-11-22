@@ -4,7 +4,7 @@ import Head from "next/head";
 import Script from "next/script";
 import Providers from "./providers";
 // import Navbar from "./components/NavBar/navBar";
-// import Footer from "./components/Footer";
+import Footer from "./components/Footer";
 
 export const metadata = {
   title: "IOT Project",
@@ -39,8 +39,8 @@ export default function RootLayout({ children }) {
         <Providers>
           {/* <Navbar /> */}
           {children}
+          {/* <Footer /> */}
         </Providers>
-        {/* <Footer /> */}
       </body>
     </html>
   );
