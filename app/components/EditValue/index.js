@@ -32,7 +32,6 @@ const SetPointEdit = () => {
               Tem_SetPoint_off,
               Hum_SetPoint_on,
               Hum_SetPoint_off,
-
               Light_Relay_1,
               Light_Relay_2,
             } = docsData[0];
@@ -41,7 +40,6 @@ const SetPointEdit = () => {
             setTemperatureSetPointOff(Tem_SetPoint_off || "");
             setHumiditySetPointOn(Hum_SetPoint_on || "");
             setHumiditySetPointOff(Hum_SetPoint_off || "");
-
             setLightRelay1(Light_Relay_1 || false);
             setLightRelay2(Light_Relay_2 || false);
           }
@@ -91,8 +89,8 @@ const SetPointEdit = () => {
     // Add logic to update Firestore with the new value
     const devicesCollection = collection(db, "devices");
     const deviceDoc = doc(devicesCollection, "iot-project");
-    updateDoc(deviceDoc, { Light_Relay1: newValue }).catch((error) => {
-      console.error("Error updating Light_Relay1:", error);
+    updateDoc(deviceDoc, { Light_Relay_1: newValue }).catch((error) => {
+      console.error("Error updating Light_Relay_1:", error);
     });
   };
 
@@ -103,9 +101,41 @@ const SetPointEdit = () => {
     // Add logic to update Firestore with the new value
     const devicesCollection = collection(db, "devices");
     const deviceDoc = doc(devicesCollection, "iot-project");
-    updateDoc(deviceDoc, { Light_Relay2: newValue }).catch((error) => {
-      console.error("Error updating Light_Relay2:", error);
+    updateDoc(deviceDoc, { Light_Relay_2: newValue }).catch((error) => {
+      console.error("Error updating Light_Relay_2:", error);
     });
+  };
+
+  const handleTurnOnRelay1 = async () => {
+    // Add logic to update Firestore and setLightRelay1(true)
+    const devicesCollection = collection(db, "devices");
+    const deviceDoc = doc(devicesCollection, "iot-project");
+    await updateDoc(deviceDoc, { Light_Relay_1: 1 });
+    setLightRelay1(true);
+  };
+
+  const handleTurnOffRelay1 = async () => {
+    // Add logic to update Firestore and setLightRelay1(false)
+    const devicesCollection = collection(db, "devices");
+    const deviceDoc = doc(devicesCollection, "iot-project");
+    await updateDoc(deviceDoc, { Light_Relay_1: 0 });
+    setLightRelay1(false);
+  };
+
+  const handleTurnOnRelay2 = async () => {
+    // Add logic to update Firestore and setLightRelay2(true)
+    const devicesCollection = collection(db, "devices");
+    const deviceDoc = doc(devicesCollection, "iot-project");
+    await updateDoc(deviceDoc, { Light_Relay_2: 1 });
+    setLightRelay2(true);
+  };
+
+  const handleTurnOffRelay2 = async () => {
+    // Add logic to update Firestore and setLightRelay2(false)
+    const devicesCollection = collection(db, "devices");
+    const deviceDoc = doc(devicesCollection, "iot-project");
+    await updateDoc(deviceDoc, { Light_Relay_2: 0 });
+    setLightRelay2(false);
   };
 
   return (
@@ -240,6 +270,13 @@ const SetPointEdit = () => {
               offColor="#EF4444"
               //   disabled={!isEditingHumidity}
             />
+            {/* <button
+              type="button"
+              onClick={lightRelay1 ? handleTurnOffRelay1 : handleTurnOnRelay1}
+              className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+            >
+              {lightRelay1 ? "Turn Off" : "Turn On"}
+            </button> */}
           </div>
         </div>
 
@@ -256,6 +293,13 @@ const SetPointEdit = () => {
               offColor="#EF4444"
               //   disabled={!isEditingHumidity}
             />
+            {/* <button
+              type="button"
+              onClick={lightRelay2 ? handleTurnOffRelay2 : handleTurnOnRelay2}
+              className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+            >
+              {lightRelay2 ? "Turn Off" : "Turn On"}
+            </button> */}
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ const db = getFirestore();
 const images = () => {
   return (
     <div>
-      <div className="p-4  sm:ml-64">
+      <div className="p-4 flex items-center sm:ml-64">
         <ImageGallery />
       </div>
     </div>
