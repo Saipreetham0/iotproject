@@ -7,6 +7,9 @@ import "../styles/globals.css";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Sensor from "../components/sensorsData";
+
+import SetPointEdit from "../components/EditValue";
+
 // import Switch from "../components/Switch";
 
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
@@ -24,54 +27,13 @@ const dashboard = () => {
             Welcome back, UserName 🙂
           </h2>
           <Sensor />
-          {/* <h2 className="text-xl font-medium m-4 ">
-            Welcome back, UserName 🙂
-          </h2>
-          <h2 className="text-xl font-medium m-4 ">📊 Dashboard</h2>
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
-            <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
-                Temperature
-              </h2>
+          <SetPointEdit />
 
-              <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
-                Numbers
-              </p>
-            </div>
-
-            <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
-                Humidity
-              </h2>
-
-              <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
-                Numbers
-              </p>
-            </div>
-            <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
-                C02
-              </h2>
-
-              <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
-                Numbers
-              </p>
-            </div>
-            <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
-              <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
-                Lux
-              </h2>
-
-              <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
-                Numbers
-              </p>
-            </div>
-          </div> */}
           {/* <h2 className="text-xl font-medium m-4 ">
             Temperature and Humidity Set Points
           </h2> */}
 
-          <div className="grid grid-cols-1 xl:grid-cols-3 mt-5 gap-2">
+          {/* <div className="grid grid-cols-1 xl:grid-cols-3 mt-5 gap-2">
             <div>
               <h2 className="text-xl font-medium m-2 ">Temperature</h2>
               <div className="xl:w-3/5">
@@ -162,7 +124,7 @@ const dashboard = () => {
               </div>
             </div>
             <div className=""></div>
-          </div>
+          </div>*/}
         </div>
       </div>
     </div>

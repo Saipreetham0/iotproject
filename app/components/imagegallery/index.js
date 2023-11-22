@@ -1,36 +1,50 @@
 // pages/index.js or any Next.js component
-// "use client";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-// import firebase from "firebase/app";
-import app, { db } from "@/utils/firebase";
-import { doc, getDoc, collection } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 const ImageGallery = () => {
-  const [galleryURL, setGalleryURL] = useState("");
+  const [galleryImages, setGalleryImages] = useState([]);
 
-  // useEffect(() => {
-  //   const getGalleryURL = async () => {
-  //     const colRef = collection(db, "gallery");
-  //     const querySnapshot = await getDocs(colRef);
+  useEffect(() => {
+    const fetchGalleryImages = async () => {
+      const colRef = collection(db, "gallery");
+      const querySnapshot = await getDocs(colRef);
 
-  //     querySnapshot.forEach((doc) => {
-  //       const data = doc.data();
-  //       console.log(data);
-  //       const url = data.url;
-  //       setGalleryURL(url);
-  //     });
-  //   };
+      const imagesData = [];
 
-  //   getGalleryURL();
-  // }, []);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        const imageUrl = data.myUrl;
+        console.log(imageUrl);
+
+        // Ensure the document has a valid URL before adding to the array
+        if (imageUrl) {
+          imagesData.push({ id: doc.id, imageUrl });
+        }
+      });
+
+      setGalleryImages(imagesData);
+    };
+
+    fetchGalleryImages();
+  }, []);
 
   return (
-    <div>
-      <h1>Images</h1>
-      <div>
-        {/* <div><ImageGallery url={galleryURL} /></div> */}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4  justify-center items-center">
+      {galleryImages.map((image) => (
+        <div key={image.id}>
+          {/* Ensure that the image URL is correctly formatted */}
+          <Image
+            src={image.imageUrl}
+            alt="Gallery Image"
+            width={300}
+            height={200}
+            className="rounded-lg"
+          />
+        </div>
+      ))}
     </div>
   );
 };
