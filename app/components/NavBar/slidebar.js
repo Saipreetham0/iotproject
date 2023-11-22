@@ -6,6 +6,7 @@ import Image from "next/image";
 import ThemeButton from "../NavBar/Theme";
 
 import { useRouter } from "next/navigation";
+import { auth } from "@/utils/firebase";
 // import { useAuth } from "../../../context/AuthContext";
 
 const MenuItems = [
@@ -89,6 +90,8 @@ const Sidebar = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // State for sidebar open/closed
   const [userDropdownOpen, setUserDropdownOpen] = useState(false); // State for user dropdown open/closed
 
+  // const { signOut } = useAuth(); // Replace useAuth with your actual authentication hook
+
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -96,6 +99,17 @@ const Sidebar = () => {
   const toggleUserDropdown = () => {
     setUserDropdownOpen(!userDropdownOpen);
   };
+
+  const handleLogOut = async () => {
+    try {
+      await auth.signOut(); // Use Firebase's signOut method
+      router.push("/login"); // Redirect after successful logout
+    } catch (error) {
+      console.error("Error during logout:", error.message);
+      // Handle errors if needed
+    }
+  };
+
   return (
     <div>
       <nav class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700">
@@ -253,8 +267,7 @@ const Sidebar = () => {
             <li>
               <Link
                 href="/"
-                // onClick={signOut}
-
+                onClick={handleLogOut}
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 {logOutIcon}

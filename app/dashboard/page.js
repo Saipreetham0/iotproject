@@ -7,18 +7,20 @@ import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Sensor from "../components/sensorsData";
 import SetPointEdit from "../components/EditValue";
+
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+
 const dashboard = () => {
-  const handleButton = () => {
-    router.push("/create");
-  };
+
 
   return (
     <div>
       <div className="p-4  sm:ml-64">
         <div className=" container mx-auto p-4 border border-white  rounded-lg dark:border-gray-700 mt-1">
-          <h2 className="text-xl font-medium m-4 ">
+          {/* <h2 className="text-xl font-medium m-4 ">
             Welcome back, UserName 🙂
-          </h2>
+          </h2> */}
           <Sensor />
           <h2 className="text-xl font-medium m-5 ">
             Temperature and Humidity Set Points

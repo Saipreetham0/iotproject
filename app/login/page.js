@@ -4,7 +4,6 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 import Image from "next/image";
-// import GoogleSignIn from "../components/Buttons/GoogleSignIn";
 import app from "@/utils/firebase";
 import {
   getAuth,
@@ -14,22 +13,17 @@ import {
 import { useRouter } from "next/navigation";
 import Head from "next/head";
 
-// import { Result } from "postcss";
-
 export default function LoginPage() {
   const [rememberMe, setRememberMe] = useState(false);
-
-  const handleRememberMe = () => {
-    setRememberMe(!rememberMe);
-  };
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
-  const router = useRouter(); // Add this line to import useRouter
+  const router = useRouter();
 
-  // const auth = getAuth(app);
+  const handleRememberMe = () => {
+    setRememberMe(!rememberMe);
+  };
 
   const handlePasswordToggle = () => {
     setShowPassword(!showPassword);
@@ -44,12 +38,17 @@ export default function LoginPage() {
         auth,
         email,
         password
-      ); // Pass auth instance
+      );
       router.push("/dashboard");
-      // User is logged in, you can redirect or perform other actions
     } catch (error) {
-      setError(error);
-      console.error("Error submitting form:", error);
+      // Handle specific error cases
+      if (error.code === "auth/user-not-found") {
+        setError("User not found. Check your email.");
+      } else if (error.code === "auth/wrong-password") {
+        setError("Incorrect password. Try again.");
+      } else {
+        setError("An unexpected error occurred. Please try again later.");
+      }
     }
   };
 
@@ -57,14 +56,12 @@ export default function LoginPage() {
     const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // User is already logged in, redirect to the dashboard
         router.push("/dashboard");
       }
     });
 
-    // Clean up the subscription when the component unmounts
     return () => unsubscribe();
-  });
+  }, []);
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">
@@ -84,7 +81,6 @@ export default function LoginPage() {
             <label className="font-medium dark:text-white ">Email</label>
             <input
               type="email"
-              // placeholder="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -94,8 +90,6 @@ export default function LoginPage() {
           <div>
             <label className="font-medium dark:text-white">Password</label>
             <input
-              // type="password"
-              // placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               type={showPassword ? "text" : "password"}
@@ -103,6 +97,9 @@ export default function LoginPage() {
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg dark:text-white dark:border-gray-200"
             />
           </div>
+          {error && (
+            <div className="text-red-500 text-sm">{error}</div>
+          )}
           <div className="flex items-center justify-between text-sm">
             <div className="flex items-center gap-x-3">
               <input
@@ -118,12 +115,6 @@ export default function LoginPage() {
               />
               <span className="dark:text-white">Remember me</span>
             </div>
-            {/* <Link
-              href="/forgot-password"
-              className="text-center text-indigo-600 hover:text-indigo-500"
-            >
-              Forgot password?
-            </Link> */}
           </div>
 
           <button

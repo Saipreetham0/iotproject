@@ -5,13 +5,12 @@ import React, { useState, useEffect } from "react";
 
 import { db } from "@/utils/firebase";
 // import db from "@/utils/firebase";
-
-// import { getFirestore } from "firebase/firestore";
-
 import { getDocs, collection } from "firebase/firestore";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Sensor = () => {
   const [sensorData, setSensorData] = useState([]);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,8 +39,21 @@ const Sensor = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <div>
+      <h2 className="text-xl font-medium m-4 ">
+        {" "}
+        Welcome back, {user ? user.email : "UserName"} 🙂
+      </h2>
       <h2 className="text-xl font-medium m-4 ">📊 Dashboard</h2>
 
       <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
