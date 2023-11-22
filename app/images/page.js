@@ -13,6 +13,10 @@ import ImageGallery from "../components/imagegallery";
 
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
 
+import { getFirestore } from "firebase/firestore";
+
+const db = getFirestore();
+
 const images = () => {
   return (
     <div>

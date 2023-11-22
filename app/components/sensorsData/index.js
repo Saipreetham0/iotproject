@@ -1,56 +1,53 @@
 // pages/dashboard.js
 
-import { useEffect, useState } from 'react';
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+// import { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 
+import app from "@/utils/firebase";
+// import db from "@/utils/firebase";
 
+import { getFirestore } from "firebase/firestore";
 
-const fetchDataFromFirestore = async (sensorType) => {
-  const firestore = firebase.firestore();
+import { getDoc, collection, QuerySnapshot } from "firebase/firestore";
 
-  try {
-    const collectionRef = firestore.collection(sensorType);
-    const snapshot = await collectionRef.get();
+const db = getFirestore(app);
 
-    const data = snapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-
-    return data;
-  } catch (error) {
-    console.error(`Error fetching ${sensorType} data from Firestore:`, error);
-    return [];
-  }
-};
-
-const Dashboard = () => {
-  const [temperatureData, setTemperatureData] = useState([]);
-  const [humidityData, setHumidityData] = useState([]);
-  const [co2Data, setCO2Data] = useState([]);
-  const [luxData, setLuxData] = useState([]);
+const Sensor = () => {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    const fetchSensorData = async () => {
-      const temperatureData = await fetchDataFromFirestore('temperature');
-      const humidityData = await fetchDataFromFirestore('humidity');
-      const co2Data = await fetchDataFromFirestore('co2');
-      const luxData = await fetchDataFromFirestore('lux');
+    const fetchDocs = async () => {
+      try {
+        const collectionRef = collection(db, "devices");
+        const querySnapshot = await getDocs(collectionRef);
 
-      setTemperatureData(temperatureData);
-      setHumidityData(humidityData);
-      setCO2Data(co2Data);
-      setLuxData(luxData);
+        if (!querySnapshot.empty) {
+          const docsData = querySnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          }));
+
+          setData(docsData);
+          // console.log(docsData);
+        } else {
+          console.log("No documents found");
+        }
+      } catch (error) {
+        console.error("Error fetching documents:", error);
+      }
     };
 
-    fetchSensorData();
+    fetchDocs();
   }, []);
 
   return (
     <div>
-
-      <div>
+      {/* <ul>
+        {data.map((item) => (
+          <li key={item.id}>{item.yourFieldName}</li>
+        ))}
+      </ul> */}
+      {/* <div>
         <h2>Temperature Data</h2>
         <ul>
           {temperatureData.map((reading) => (
@@ -84,9 +81,51 @@ const Dashboard = () => {
             <li key={reading.id}>{JSON.stringify(reading)}</li>
           ))}
         </ul>
+      </div> */}
+
+      {/* <h2 className="text-xl font-medium m-4 ">Welcome back, UserName 🙂</h2> */}
+      <h2 className="text-xl font-medium m-4 ">📊 Dashboard</h2>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+        <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
+            Temperature
+          </h2>
+
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Numbers
+          </p>
+        </div>
+
+        <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
+            Humidity
+          </h2>
+
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Numbers
+          </p>
+        </div>
+        <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
+            C02
+          </h2>
+
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Numbers
+          </p>
+        </div>
+        <div className=" h-32 md:h-28 lg:h-32  dark:bg-gray-800  bg-white border rounded-lg p-4 shadow-md">
+          <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl  font-semibold">
+            Lux
+          </h2>
+
+          <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
+            Numbers
+          </p>
+        </div>
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default Sensor;

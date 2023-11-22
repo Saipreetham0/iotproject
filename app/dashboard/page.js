@@ -6,6 +6,7 @@ import "../styles/globals.css";
 
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
+import Sensor from "../components/sensorsData";
 // import Switch from "../components/Switch";
 
 import { DocumentPlusIcon } from "@heroicons/react/24/outline";
@@ -20,6 +21,10 @@ const dashboard = () => {
       <div className="p-4  sm:ml-64">
         <div className=" container mx-auto p-4 border border-white  rounded-lg dark:border-gray-700 mt-1">
           <h2 className="text-xl font-medium m-4 ">
+            Welcome back, UserName 🙂
+          </h2>
+          <Sensor />
+          {/* <h2 className="text-xl font-medium m-4 ">
             Welcome back, UserName 🙂
           </h2>
           <h2 className="text-xl font-medium m-4 ">📊 Dashboard</h2>
@@ -61,18 +66,7 @@ const dashboard = () => {
                 Numbers
               </p>
             </div>
-
-            {/* <div className="h-32 md:h-28 lg:h-32 bg-gradient-to-r from-indigo-500 to-purple-500 border rounded-lg p-4 shadow-md">
-              <button className="h-full w-full flex flex-col items-center justify-center text-white bg-transparent border border-white rounded-lg transition-all duration-300 hover:bg-white hover:text-indigo-500 focus:outline-none">
-                <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold">
-                  Total Forms
-                </h2>
-                <p className="mt-2 text-sm sm:text-base md:text-lg lg:text-xl">
-                  Numbers
-                </p>
-              </button>
-            </div> */}
-          </div>
+          </div> */}
           {/* <h2 className="text-xl font-medium m-4 ">
             Temperature and Humidity Set Points
           </h2> */}
@@ -167,9 +161,7 @@ const dashboard = () => {
                 </button>
               </div>
             </div>
-            <div className="">
-     
-            </div>
+            <div className=""></div>
           </div>
         </div>
       </div>
