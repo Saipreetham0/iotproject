@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { db } from "@/utils/firebase";
-import { getDocs, collection, doc, updateDoc } from "firebase/firestore";
+// import { database } from "@/utils/firebase";
+
+import { getDatabase, ref, onValue, update } from "firebase/database";
+
 import Switch from "react-switch";
 
 const SetPointEdit = () => {
@@ -14,41 +16,50 @@ const SetPointEdit = () => {
   const [lightRelay1, setLightRelay1] = useState(false);
   const [lightRelay2, setLightRelay2] = useState(false);
 
+  const database = getDatabase();
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const collectionRef = collection(db, "devices");
-        const querySnapshot = await getDocs(collectionRef);
+    const fetchData = () => {
+      // Replace with your Realtime Database URL
+      const db = getDatabase();
 
-        if (!querySnapshot.empty) {
-          const docsData = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-          }));
+      const devicesRef = ref(db, "board1/outputs/digital");
 
-          if (docsData.length > 0) {
-            const {
-              Tem_SetPoint_on,
-              Tem_SetPoint_off,
-              Hum_SetPoint_on,
-              Hum_SetPoint_off,
-              Light_Relay_1,
-              Light_Relay_2,
-            } = docsData[0];
+      // Listen for changes on relay 1
+      const relay1Ref = ref(db, "board1/outputs/digital/25");
+      onValue(relay1Ref, (snapshot) => {
+        const value = snapshot.val();
 
-            setTemperatureSetPointOn(Tem_SetPoint_on || "");
-            setTemperatureSetPointOff(Tem_SetPoint_off || "");
-            setHumiditySetPointOn(Hum_SetPoint_on || "");
-            setHumiditySetPointOff(Hum_SetPoint_off || "");
-            setLightRelay1(Light_Relay_1 || false);
-            setLightRelay2(Light_Relay_2 || false);
-          }
-        } else {
-          console.log("No documents found");
+        setLightRelay1(value === 1);
+      });
+
+      const relay2Ref = ref(db, "board1/outputs/digital/26");
+      onValue(relay2Ref, (snapshot) => {
+        const value = snapshot.val();
+        setLightRelay2(value === 1);
+      });
+
+      onValue(devicesRef, (snapshot) => {
+        const data = snapshot.val();
+
+        if (data) {
+          const {
+            temp_set_point_on,
+            temp_set_point_off,
+            humd_set_point_on,
+            humd_set_point_off,
+            25: lightRelay1,
+            26: lightRelay2,
+          } = data;
+
+          setTemperatureSetPointOn(temp_set_point_on || "");
+          setTemperatureSetPointOff(temp_set_point_off || "");
+          setHumiditySetPointOn(humd_set_point_on || "");
+          setHumiditySetPointOff(humd_set_point_off || "");
+          setLightRelay1(lightRelay1 === 1);
+          setLightRelay2(lightRelay2 === 1);
         }
-      } catch (error) {
-        console.error("Error fetching documents:", error);
-      }
+      });
     };
 
     fetchData();
@@ -59,12 +70,16 @@ const SetPointEdit = () => {
   };
 
   const handleSaveTemperature = async () => {
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    await updateDoc(deviceDoc, {
-      Tem_SetPoint_on: temperatureSetPointOn,
-      Tem_SetPoint_off: temperatureSetPointOff,
-    });
+    const db = getDatabase();
+    const devicesRef = ref(db, "board1/outputs/digital");
+
+    const updates = {
+      temp_set_point_on: temperatureSetPointOn,
+      temp_set_point_off: temperatureSetPointOff,
+    };
+
+    update(devicesRef, updates);
+
     setIsEditingTemperature(false);
   };
 
@@ -73,69 +88,37 @@ const SetPointEdit = () => {
   };
 
   const handleSaveHumidity = async () => {
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    await updateDoc(deviceDoc, {
-      Hum_SetPoint_on: humiditySetPointOn,
-      Hum_SetPoint_off: humiditySetPointOff,
-    });
+    const db = getDatabase();
+    const devicesRef = ref(db, "board1/outputs/digital");
+
+    const updates = {
+      humd_set_point_on: humiditySetPointOn,
+      humd_set_point_off: humiditySetPointOff,
+    };
+
+    update(devicesRef, updates);
+
     setIsEditingHumidity(false);
   };
 
   const handleToggleLightRelay1 = (checked) => {
     const newValue = checked ? 1 : 0;
-    setLightRelay1(newValue);
 
-    // Add logic to update Firestore with the new value
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    updateDoc(deviceDoc, { Light_Relay_1: newValue }).catch((error) => {
-      console.error("Error updating Light_Relay_1:", error);
-    });
+    // Update Realtime Database with the new value for relay 1
+    const relay1Ref = ref(database, "board1/outputs/digital");
+
+    // Wrap newValue in an object with the key you want to update
+    update(relay1Ref, { 25: newValue });
   };
 
   const handleToggleLightRelay2 = (checked) => {
     const newValue = checked ? 1 : 0;
-    setLightRelay2(newValue);
 
-    // Add logic to update Firestore with the new value
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    updateDoc(deviceDoc, { Light_Relay_2: newValue }).catch((error) => {
-      console.error("Error updating Light_Relay_2:", error);
-    });
-  };
+    // Update Realtime Database with the new value for relay 2
+    const relay2Ref = ref(database, "board1/outputs/digital");
 
-  const handleTurnOnRelay1 = async () => {
-    // Add logic to update Firestore and setLightRelay1(true)
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    await updateDoc(deviceDoc, { Light_Relay_1: 1 });
-    setLightRelay1(true);
-  };
-
-  const handleTurnOffRelay1 = async () => {
-    // Add logic to update Firestore and setLightRelay1(false)
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    await updateDoc(deviceDoc, { Light_Relay_1: 0 });
-    setLightRelay1(false);
-  };
-
-  const handleTurnOnRelay2 = async () => {
-    // Add logic to update Firestore and setLightRelay2(true)
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    await updateDoc(deviceDoc, { Light_Relay_2: 1 });
-    setLightRelay2(true);
-  };
-
-  const handleTurnOffRelay2 = async () => {
-    // Add logic to update Firestore and setLightRelay2(false)
-    const devicesCollection = collection(db, "devices");
-    const deviceDoc = doc(devicesCollection, "iot-project");
-    await updateDoc(deviceDoc, { Light_Relay_2: 0 });
-    setLightRelay2(false);
+    // Wrap newValue in an object with the key you want to update
+    update(relay2Ref, { 26: newValue });
   };
 
   return (
@@ -257,10 +240,12 @@ const SetPointEdit = () => {
       </div>
 
       <div className="">
-      <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mt-4 shadow-md">
-  <h2 className="text-xl font-medium mb-2 dark:text-white">Light Relay 1</h2>
-  <div className="flex items-center">
-    <label className="font-medium text-gray-700 dark:text-gray-300 mr-4">
+        <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mt-4 shadow-md">
+          <h2 className="text-xl font-medium mb-2 dark:text-white">
+            Light Relay 1
+          </h2>
+          <div className="flex items-center">
+            <label className="font-medium text-gray-700 dark:text-gray-300 mr-4">
               Relay Control
             </label>
             <Switch
@@ -281,32 +266,21 @@ const SetPointEdit = () => {
         </div>
 
         <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mt-4 shadow-md">
-  <h2 className="text-xl font-medium mb-2 dark:text-white">Light Relay 2</h2>
-  <div className="flex items-center">
-    <label className="font-medium text-gray-700 dark:text-gray-300 mr-4">
-      Relay Control
-    </label>
-    <Switch
-      onChange={handleToggleLightRelay2}
-      checked={lightRelay2}
-      onColor="#10B981"
-      offColor="#EF4444"
-    />
-    {/* Add dark mode styles to the button if needed */}
-    {/* <button
-      type="button"
-      onClick={lightRelay2 ? handleTurnOffRelay2 : handleTurnOnRelay2}
-      className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150 dark:bg-gray-700 dark:hover:bg-gray-600 dark:active:bg-gray-700"
-    >
-      {lightRelay2 ? "Turn Off" : "Turn On"}
-    </button> */}
-
-
-  </div>
-
-
-</div>
-
+          <h2 className="text-xl font-medium mb-2 dark:text-white">
+            Light Relay 2
+          </h2>
+          <div className="flex items-center">
+            <label className="font-medium text-gray-700 dark:text-gray-300 mr-4">
+              Relay Control
+            </label>
+            <Switch
+              onChange={handleToggleLightRelay2}
+              checked={lightRelay2}
+              onColor="#10B981"
+              offColor="#EF4444"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
