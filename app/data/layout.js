@@ -17,7 +17,7 @@ export default function RootLayout({ children }) {
         <Providers>
         {/* <NewsBanner /> */}
 
-        <Sidebar />
+        {/* <Sidebar /> */}
         <main className="mt-20">{children}</main>
         {/* <Footer /> */}
         </Providers>
