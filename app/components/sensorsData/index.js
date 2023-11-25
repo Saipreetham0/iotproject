@@ -67,7 +67,9 @@ const Sensor = () => {
           </h2>
           <h2 className="text-xl font-medium m-4 ">📊 Dashboard</h2>
 
-          <h3>Last Update : {sensorData.timestamp}</h3>
+          <h3 className="text-sl font-medium m-4">
+            Last Update : {sensorData.timestamp}
+          </h3>
 
           <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
             <SensorBox

@@ -243,7 +243,7 @@ const SetPointEdit = () => {
 
   return (
     <div>
-      <div className="grid grid-cols-1 xl:grid-cols-2 mt-5 gap-2">
+      <div className="grid grid-cols-1 xl:grid-cols-3 mt-5 gap-2">
         {/* Temperature */}
         <div>
           <h2 className="text-xl font-medium m-2 ">Temperature</h2>
