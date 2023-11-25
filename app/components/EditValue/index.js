@@ -10,6 +10,10 @@ const SetPointEdit = () => {
   const [temperatureSetPointOff, setTemperatureSetPointOff] = useState();
   const [humiditySetPointOn, setHumiditySetPointOn] = useState();
   const [humiditySetPointOff, setHumiditySetPointOff] = useState();
+
+  const [dehumidifierSetPointOn, setDehumidifierSetPointOn] = useState();
+  const [dehumidifierSetPointOff, setDehumidifierSetPointOff] = useState();
+  const [isEditingDeHumidity, setIsEditingDeHumidity] = useState(false);
   const [isEditingTemperature, setIsEditingTemperature] = useState(false);
   const [isEditingHumidity, setIsEditingHumidity] = useState(false);
 
@@ -19,7 +23,6 @@ const SetPointEdit = () => {
   const [lightRelay3, setLightRelay3] = useState(false);
   const [lightRelay4, setLightRelay4] = useState(false);
   const [lightRelay5, setLightRelay5] = useState(false);
-  const [lightRelay6, setLightRelay6] = useState(false);
 
   const database = getDatabase();
 
@@ -62,12 +65,6 @@ const SetPointEdit = () => {
         setLightRelay5(value === 1);
       });
 
-      const relay6Ref = ref(db, "board1/outputs/digital/23");
-      onValue(relay6Ref, (snapshot) => {
-        const value = snapshot.val();
-        setLightRelay6(value === 1);
-      });
-
       onValue(devicesRef, (snapshot) => {
         const data = snapshot.val();
 
@@ -77,24 +74,26 @@ const SetPointEdit = () => {
             temp_set_point_off,
             humd_set_point_on,
             humd_set_point_off,
+            dehumd_set_point_on,
+            dehumd_set_point_off,
             23: lightRelay1,
             4: lightRelay2,
             19: lightRelay3,
             13: lightRelay4,
             25: lightRelay5,
-            // 26: lightRelay6,
           } = data;
 
           setTemperatureSetPointOn(temp_set_point_on || "");
           setTemperatureSetPointOff(temp_set_point_off || "");
           setHumiditySetPointOn(humd_set_point_on || "");
           setHumiditySetPointOff(humd_set_point_off || "");
+          setDehumidifierSetPointOn(dehumd_set_point_on || "");
+          setDehumidifierSetPointOff(dehumd_set_point_off || "");
           setLightRelay1(lightRelay1 === 0);
           setLightRelay2(lightRelay2 === 0);
           setLightRelay3(lightRelay3 === 0);
           setLightRelay4(lightRelay4 === 0);
           setLightRelay5(lightRelay5 === 0);
-          // setLightRelay6(lightRelay6 === 0);
         }
       });
     };
@@ -138,37 +137,43 @@ const SetPointEdit = () => {
     setIsEditingHumidity(false);
   };
 
-  // const handleToggleLightRelay1 = (checked) => {
-  //   const newValue = checked ? 1 : 0;
-
-  //   // Update Realtime Database with the new value for relay 1
-  //   const relay1Ref = ref(database, "board1/outputs/digital");
-
-  //   // Wrap newValue in an object with the key you want to update
-  //   update(relay1Ref, { 25: newValue });
+  // const handleEditDeHumidity = () => {
+  //   setIsEditingDeHumidity(true);
   // };
 
-  // const handleToggleLightRelay2 = (checked) => {
-  //   const newValue = checked ? 1 : 0;
+  // const handleSaveDeHumidity = async () => {
+  //   const db = getDatabase();
+  //   const devicesRef = ref(db, "board1/outputs/digital");
 
-  //   // Update Realtime Database with the new value for relay 2
-  //   const relay2Ref = ref(database, "board1/outputs/digital");
+  //   const updates = {
+  //     dehumd_set_point_on: parseFloat(dehumiditySetPointOn, 10),
+  //     dehumd_set_point_off: parseFloat(dehumiditySetPointOff, 10),
+  //   };
 
-  //   // Wrap newValue in an object with the key you want to update
-  //   update(relay2Ref, { 26: newValue });
+  //   update(devicesRef, updates);
+
+  //   setIsEditingDeHumidity(false);
   // };
 
-  // const handleToggleLightRelay = (relayNumber, checked) => {
-  //   const newValue = checked ? 1 : 0;
+  const handleEditDeHumidity = () => {
+    setIsEditingDeHumidity(true);
+  };
 
-  //   // Update Realtime Database with the new value for the specified relay
-  //   const relayRef = ref(database, `board1/outputs/digital`);
+  const handleSaveDeHumidity = async () => {
+    const db = getDatabase();
+    const devicesRef = ref(db, "board1/outputs/digital");
 
-  //   // Wrap newValue in an object with the key you want to update
-  //   update(relayRef, { [relayNumber]: newValue });
-  // };
+    const updates = {
+      // ... (existing updates)
 
-  // Usage example in your component:
+      dehumd_set_point_on: parseFloat(dehumidifierSetPointOn, 10),
+      dehumd_set_point_off: parseFloat(dehumidifierSetPointOff, 10),
+    };
+
+    update(devicesRef, updates);
+
+    setIsEditingDeHumidity(false);
+  };
 
   // For relay 1
   const handleToggleLightRelay1 = (checked) => {
@@ -192,10 +197,6 @@ const SetPointEdit = () => {
   const handleToggleLightRelay5 = (checked) => {
     handleToggleLightRelay(25, checked);
   };
-
-  // const handleToggleLightRelay6 = (checked) => {
-  //   handleToggleLightRelay(26, checked);
-  // };
 
   const handleToggleLightRelay = (relayNumber, checked) => {
     console.log(`Toggling Relay ${relayNumber} to ${checked}`);
@@ -238,11 +239,6 @@ const SetPointEdit = () => {
       state: lightRelay5,
       handleToggle: handleToggleLightRelay5,
     },
-    // {
-    //   relayNumber: 6,
-    //   state: lightRelay6,
-    //   handleToggle: handleToggleLightRelay6,
-    // },
   ];
 
   return (
@@ -298,6 +294,64 @@ const SetPointEdit = () => {
               <button
                 type="button"
                 onClick={handleEditTemperature}
+                className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+              >
+                Edit
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Dehumidity */}
+        <div className="">
+          <h2 className="text-xl font-medium m-2 ">Dehumidity</h2>
+          <div className="xl:w-3/5">
+            <label className="font-medium dark:text-white">Set Point On</label>
+            <input
+              type="number"
+              value={dehumidifierSetPointOn}
+              onChange={(e) => setDehumidifierSetPointOn(e.target.value)}
+              required
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg dark:text-white dark:border-gray-200"
+              disabled={!isEditingDeHumidity}
+            />
+          </div>
+          <div className=" xl:w-3/5">
+            <label className="font-medium dark:text-white">Set Point off</label>
+            <input
+              type="number"
+              value={dehumidifierSetPointOff}
+              onChange={(e) => setDehumidifierSetPointOff(e.target.value)}
+              required
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg dark:text-white dark:border-gray-200"
+              disabled={!isEditingDeHumidity}
+            />
+          </div>
+
+          <div className="flex gap-2">
+            {isEditingDeHumidity && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleSaveDeHumidity}
+                  className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
+                >
+                  Save
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setIsEditingDeHumidity(false)}
+                  className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-gray-500 hover:bg-gray-400 active:bg-gray-500 rounded-lg duration-150"
+                >
+                  Cancel
+                </button>
+              </>
+            )}
+            {!isEditingDeHumidity && (
+              <button
+                type="button"
+                onClick={handleEditDeHumidity}
                 className="w-1/3 xl:w-1/6 px-4 py-2 mt-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
               >
                 Edit
