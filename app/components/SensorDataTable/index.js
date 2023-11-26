@@ -162,9 +162,9 @@ const SensorDataTable = () => {
                 </th>
                 <th className="py-2 px-4 border-b dark:border-gray-600">CO2</th>
                 <th className="py-2 px-4 border-b dark:border-gray-600">Lux</th>
-                <th className="py-2 px-4 border-b dark:border-gray-600">
+                {/* <th className="py-2 px-4 border-b dark:border-gray-600">
                   Actions
-                </th>
+                </th> */}
               </tr>
             </thead>
             <tbody>
@@ -192,14 +192,14 @@ const SensorDataTable = () => {
                   <td className="py-2 px-4 border-b dark:border-gray-600">
                     {sensor.lux}
                   </td>
-                  <td className="py-2 px-4 border-b dark:border-gray-600">
+                  {/* <td className="py-2 px-4 border-b dark:border-gray-600">
                     <button
                       onClick={() => handleDelete(sensor.id)}
                       className="text-red-500 hover:text-red-700"
                     >
                       Delete
                     </button>
-                  </td>
+                  </td> */}
                 </tr>
               ))}
             </tbody>
