@@ -56,12 +56,12 @@ const SensorDataTable = () => {
             device1CollectionRef,
             orderBy("myTimestamp", "desc"),
             startAfter(lastDocument),
-            limit(10)
+            limit(100)
           )
         : query(
             device1CollectionRef,
             orderBy("myTimestamp", "desc"),
-            limit(10)
+            limit(100)
           );
 
       const device1Docs = await getDocs(q);
@@ -106,7 +106,7 @@ const SensorDataTable = () => {
     <div>
       {/* <LineChart  />
        */}
-      <div className="grid grid-cols-1 xl:grid-cols-2 mt-5 gap-2">
+      <div className="grid grid-cols-1 xl:grid-cols-2  gap-2">
         {/* Add a LineChart component for each sensor */}
         <LineChart
           title="Temperature"
