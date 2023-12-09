@@ -142,6 +142,15 @@ const SensorDataTable = () => {
         />
       </div>
 
+      <div className="mt-4">
+        <button
+          onClick={fetchNextPage}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Load More
+        </button>
+      </div>
+
       <div className="container mx-auto mt-8">
         <h1 className="text-3xl font-bold mb-4 text-gray-800 dark:text-white">
           Sensor Data Table
