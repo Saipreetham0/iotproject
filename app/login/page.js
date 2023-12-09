@@ -65,9 +65,9 @@ export default function LoginPage() {
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">
-      <Head>
+      {/* <Head>
         <title>NeoVest SignIn</title>
-      </Head>
+      </Head> */}
       <div className="max-w-sm w-full text-gray-600 space-y-5">
         <div className="text-center pb-8">
           <div className="mt-5">

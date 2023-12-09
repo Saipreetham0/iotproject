@@ -19,20 +19,21 @@ const LineChart = ({ title, sensorData, lineColor }) => {
   };
 
   const options = {
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     responsive: false, // Set responsive to false
     scales: {
       x: [
         {
           type: "category",
           labels: [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
+            title,
+            // "January",
+            // "February",
+            // "March",
+            // "April",
+            // "May",
+            // "June",
+            // "July",
           ],
         },
       ],
@@ -61,7 +62,7 @@ const LineChart = ({ title, sensorData, lineColor }) => {
     },
   };
 
-  return <Line data={data} options={options} height={350} width={450} />;
+  return <Line data={data} options={options} height={450} width={550} />;
 };
 
 export default LineChart;
