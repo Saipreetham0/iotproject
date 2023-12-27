@@ -203,7 +203,6 @@
 
 // export default SensorDataTable;
 
-
 // SensorDataTable.js
 import React, { useState, useEffect } from "react";
 import { db } from "@/utils/firebase";
@@ -308,6 +307,33 @@ const SensorDataTable = () => {
     }
   };
 
+  // const handleDelete = async (id) => {
+  //   try {
+  //     // const device1DocRef = doc(db, "device1", id);
+  //     // await deleteDoc(device1DocRef);
+  //     // setSensorData((prevData) =>
+  //     //   prevData.filter((sensor) => sensor.id !== id)
+  //     // );
+
+  //     const confirmed = window.confirm(
+  //       "Are you sure you want to delete this Data?"
+  //     );
+  //     if (confirmed) {
+  //       try {
+  //         const device1DocRef = doc(db, "device1", id);
+  //         await deleteDoc(device1DocRef);
+  //         setSensorData((prevData) =>
+  //           prevData.filter((sensor) => sensor.id !== id)
+  //         );
+  //       } catch (error) {
+  //         console.error("Error deleting sensor data:", error);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error deleting sensor data:", error);
+  //   }
+  // };
+
   return (
     <div>
       <div className="flex space-x-4 mb-4">
@@ -344,9 +370,6 @@ const SensorDataTable = () => {
           One Week
         </button>
       </div>
-
-
-      
 
       <div className="grid grid-cols-1 xl:grid-cols-2  gap-2">
         {sensorData.length > 0 && (
@@ -408,6 +431,9 @@ const SensorDataTable = () => {
                 </th>
                 <th className="py-2 px-4 border-b dark:border-gray-600">CO2</th>
                 <th className="py-2 px-4 border-b dark:border-gray-600">Lux</th>
+                <th className="py-2 px-4 border-b dark:border-gray-600">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -435,6 +461,14 @@ const SensorDataTable = () => {
                   <td className="py-2 px-4 border-b dark:border-gray-600">
                     {sensor.lux}
                   </td>
+                  <td className="py-2 px-4 border-b dark:border-gray-600">
+                    <button
+                      onClick={() => handleDelete(sensor.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -456,4 +490,3 @@ const SensorDataTable = () => {
 };
 
 export default SensorDataTable;
-
