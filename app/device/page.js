@@ -3,7 +3,7 @@
 import Image from "next/image";
 
 import "../styles/globals.css";
-import SensorDataTable from "../components/SensorDataTable";
+
 
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
@@ -11,14 +11,14 @@ import React, { useState, useEffect } from "react";
 
 
 
-const dashboard = () => {
+const device = () => {
   return (
     <div>
       <div className="p-4  sm:ml-64">
-        {/* <SensorDataTable /> */}
-      </div>
+
+       </div>
     </div>
   );
 };
 
-export default dashboard;
+export default device;
